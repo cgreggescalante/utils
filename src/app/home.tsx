@@ -8,6 +8,11 @@ const Home = () => {
                     MultiStopwatch
                 </button>
             </Link>
+            <Link to={"/calculator"}>
+                <button>
+                    Calculator
+                </button>
+            </Link>
         </>
     )
 }
