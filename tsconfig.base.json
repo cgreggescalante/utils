@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@utils/calculator": ["calculator/src/index.ts"],
       "@utils/multi-stopwatch": ["multi-stopwatch/src/index.ts"],
       "@utils/shared/ui": ["shared/ui/src/index.ts"]
     }

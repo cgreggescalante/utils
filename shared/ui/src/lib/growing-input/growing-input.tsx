@@ -1,4 +1,3 @@
-import styles from './growing-input.module.css';
 import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 
 /* eslint-disable-next-line */
