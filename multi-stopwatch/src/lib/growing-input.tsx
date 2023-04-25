@@ -19,8 +19,8 @@ const GrowingInput = ({ value, onChange }: { value: string | undefined, onChange
             <span style={{
                 position: "absolute", opacity: 0, zIndex: -100, whiteSpace: "pre"
             }} ref={span}>{content}</span>
-        <input type="text" value={content} style={{ minWidth: "1px", padding: 0, width: width + 5 }} autoFocus onChange={changeHandler} />
-    </>
+            <input type="text" value={content} style={{ minWidth: "1px", padding: 0, width: width + 5 }} autoFocus onChange={changeHandler} />
+        </>
 );
 };
 
