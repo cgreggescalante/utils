@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
-import GrowingInput from "./growing-input";
+import { GrowingInput } from "@utils/shared/ui";
 import downloadFile from "./dowload-file";
 import Stopwatch from "./stopwatch";
 import {exportLaps, LapExportFormat} from "./lap-export";

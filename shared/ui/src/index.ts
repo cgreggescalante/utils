@@ -1,5 +1,5 @@
-import { ManagedInput } from "./lib/managed-input/managed-input";
+import { ManagedInput } from './lib/managed-input/managed-input';
 
-export {
-    ManagedInput
-}
+export * from './lib/growing-input/growing-input';
+
+export { ManagedInput };
