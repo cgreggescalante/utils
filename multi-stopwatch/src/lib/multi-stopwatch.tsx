@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
-import { GrowingInput } from "@utils/shared/ui";
+import {GrowingInput, ManagedInput} from "@utils/shared/ui";
 import downloadFile from "./dowload-file";
 import Stopwatch from "./stopwatch";
 import {exportLaps, LapExportFormat} from "./lap-export";
@@ -11,6 +11,7 @@ const MultiStopwatch = () => {
     const [startTime, setStartTime] = useState(0);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [running, setRunning] = useState(false);
+    const [stopwatchName, setStopwatchName] = useState("Stopwatch");
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
@@ -58,18 +59,11 @@ const MultiStopwatch = () => {
         setRunning(false);
     }
 
-    const exportJSON = () => {
-        const exportData = exportLaps(stopwatches.map(sw => sw.saveData()), LapExportFormat.JSON);
-        const blob = new Blob([exportData], { type: "application/json"});
-
-        downloadFile("save.json", blob);
-    }
-
     const exportCSV = () => {
         const exportData = exportLaps(stopwatches.map(sw => sw.saveData()), LapExportFormat.CSV);
         const blob = new Blob([exportData], { type: "text/csv"});
 
-        downloadFile("save.csv", blob);
+        downloadFile(`${stopwatchName.split(" ").join("-")}.csv`, blob);
     }
 
     const getMaxSplitCount = () => stopwatches.map(sw => sw.getSplits().length).reduce((max, current) => current > max ? current : max, 1);
@@ -109,7 +103,12 @@ const MultiStopwatch = () => {
                 <button onClick={handleRemoveStopwatch} disabled={stopwatches.length == 0}>-</button>
             </div>
 
+
             <Card.Body>
+                <div>
+                    <ManagedInput value={stopwatchName} valueSetter={setStopwatchName} />
+                </div>
+
                 { formatMilliseconds(elapsedTime) }
 
                 <div className={"table-responsive"}>
@@ -159,7 +158,6 @@ const MultiStopwatch = () => {
             </Card.Body>
 
             <div>
-                <button onClickCapture={exportJSON} disabled={stopwatches.length == 0 || startTime == 0}>Export JSON</button>
                 <button onClickCapture={exportCSV} disabled={stopwatches.length == 0 || startTime == 0}>Export CSV</button>
             </div>
         </Card>
