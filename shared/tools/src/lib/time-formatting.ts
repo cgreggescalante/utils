@@ -2,7 +2,7 @@ const formatMilliseconds = (milliseconds: number) => {
   const hours = Math.floor(milliseconds / 1000 / 60 / 60);
   const minutes = Math.floor(milliseconds / 1000 / 60) % 60;
   const seconds = Math.floor(milliseconds / 1000) % 60;
-  const ms = milliseconds % 1000
+  const ms = Math.floor(milliseconds % 1000);
 
   let out = "";
 
@@ -20,4 +20,6 @@ const formatMilliseconds = (milliseconds: number) => {
   return out;
 }
 
-export { formatMilliseconds }
+const formatSeconds = (seconds: number) => formatMilliseconds(seconds * 1000);
+
+export { formatMilliseconds, formatSeconds }
