@@ -4,6 +4,7 @@ import { GrowingInput } from "@utils/shared/ui";
 import downloadFile from "./dowload-file";
 import Stopwatch from "./stopwatch";
 import {exportLaps, LapExportFormat} from "./lap-export";
+import {formatMilliseconds} from "@utils/shared/tools";
 
 const MultiStopwatch = () => {
     const [stopwatches, setStopwatches] = useState<Stopwatch[]>([new Stopwatch("1")]);
@@ -13,11 +14,8 @@ const MultiStopwatch = () => {
 
     useEffect(() => {
         let interval: NodeJS.Timeout;
-        if (running) {
-            interval = setInterval(() => {
-                setElapsedTime(Date.now() - startTime);
-            }, 100);
-        }
+        if (running)
+            interval = setInterval(() => setElapsedTime(Date.now() - startTime), 100);
         return () => clearInterval(interval);
     }, [running]);
 
@@ -112,7 +110,7 @@ const MultiStopwatch = () => {
             </div>
 
             <Card.Body>
-                {elapsedTime / 1000}s
+                { formatMilliseconds(elapsedTime) }
 
                 <div className={"table-responsive"}>
                     <table className={"table table-sm table-striped-columns align-middle"}>
@@ -124,7 +122,7 @@ const MultiStopwatch = () => {
                             {
                                 Array.from({ length: getMaxSplitCount() }, (_, index) => getMaxSplitCount() - index).map(i => <th>{ i }</th>)
                             }
-                            <th style={{ width: "98%" }}/>
+                            <th style={{ width: "90%" }}/>
                         </tr>
                         </thead>
                         <tbody className={"table-group-divider"}>
@@ -146,8 +144,8 @@ const MultiStopwatch = () => {
                                                 <td></td>
                                                 :
                                                 <td>
-                                                    <span className={"fs-5"}>{ sw.getSplits()[i].splitTime / 1000 }</span> <br />
-                                                    <span className={"fw-light fs-6"}>{ sw.getSplits()[i].lapTime / 1000 }</span>
+                                                    <span className={"fs-5"}>{ formatMilliseconds(sw.getSplits()[i].splitTime) }</span> <br />
+                                                    <span className={"fw-light fs-6"}>{ formatMilliseconds(sw.getSplits()[i].lapTime) }</span>
                                                 </td>
                                         )
                                     }
