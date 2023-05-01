@@ -1,6 +1,6 @@
 import {useState} from "react";
 import MultiStopwatch from "./multi-stopwatch";
-import MultiStopwatchComponent from "./multi-stopwatch-component";
+import MultiStopwatchComponent from "./multi-stopwatch-component/multi-stopwatch-component";
 import * as XLSX from 'xlsx';
 import downloadFile from "./download-file";
 import {ManagedInput} from "@utils/shared/ui";
@@ -8,11 +8,11 @@ import {formatMilliseconds} from "@utils/shared/tools";
 
 const stopwatchSession = () => {
     const [sessionName, setSessionName] = useState<string>('New Session');
-    const [multiStopwatches, setMultiStopwatches] = useState([new MultiStopwatch()])
+    const [multiStopwatches, setMultiStopwatches] = useState([new MultiStopwatch("Stopwatch 1")])
 
     const addMultiStopwatch = () => {
         const arr = [...multiStopwatches];
-        arr.push(new MultiStopwatch());
+        arr.push(new MultiStopwatch(`Stopwatch ${arr.length}`));
         setMultiStopwatches(arr);
     }
 
@@ -73,7 +73,7 @@ const stopwatchSession = () => {
 
             {
                 multiStopwatches.map((ms, i) =>
-                    <MultiStopwatchComponent multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} />
+                    <MultiStopwatchComponent key={i} multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} />
                 )
             }
         </>

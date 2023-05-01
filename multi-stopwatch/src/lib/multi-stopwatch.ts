@@ -8,11 +8,11 @@ class MultiStopwatch {
     public hasStarted: boolean;
     public name: string;
 
-    constructor() {
+    constructor(name: string) {
         this.stopwatches = [new Stopwatch('1')];
         this.running = false;
         this.hasStarted = false;
-        this.name = "Stopwatch";
+        this.name = name;
     }
 
     addStopwatch() {
@@ -75,14 +75,13 @@ class MultiStopwatch {
     }
 
     deepCopy(): MultiStopwatch {
-        const m = new MultiStopwatch();
+        const m = new MultiStopwatch(this.name);
 
         m.stopwatches = this.stopwatches.map(s => s.deepCopy());
         m.startTime = this.startTime;
         m.stopTime = this.stopTime;
         m.running = this.running;
         m.hasStarted = this.hasStarted;
-        m.name = this.name;
 
         return m;
     }

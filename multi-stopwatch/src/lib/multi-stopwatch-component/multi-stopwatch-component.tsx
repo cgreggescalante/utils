@@ -2,7 +2,8 @@ import {useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
 import {GrowingInput, ManagedInput} from "@utils/shared/ui";
 import {formatMilliseconds} from "@utils/shared/tools";
-import MultiStopwatch from "./multi-stopwatch";
+import MultiStopwatch from "../multi-stopwatch";
+import style from './multi-stopwatch-component.module.css';
 
 interface MultiStopwatchProps {
     multiStopwatch: MultiStopwatch;
@@ -106,7 +107,7 @@ const MultiStopwatchComponent = ({ multiStopwatch, setMultiStopwatch }: MultiSto
                             <th style={{ width: "1%" }}/>
                             <th style={{ width: "1%" }}/>
                             {
-                                Array.from({ length: getMaxSplitCount() }, (_, index) => getMaxSplitCount() - index).map(i => <th>{ i }</th>)
+                                Array.from({ length: getMaxSplitCount() }, (_, index) => getMaxSplitCount() - index).map(i => <th key={i}>{ i }</th>)
                             }
                             <th style={{ width: "90%" }}/>
                         </tr>
@@ -114,22 +115,22 @@ const MultiStopwatchComponent = ({ multiStopwatch, setMultiStopwatch }: MultiSto
                         <tbody className={"table-group-divider"}>
                         {
                             multiStopwatch.stopwatches.map((sw, stopwatchIndex) =>
-                                <tr style={{ height: "65px" }}>
+                                <tr key={stopwatchIndex} style={{ height: "65px" }}>
                                     <td className={"fs-5"}>
                                         <GrowingInput value={ sw.name } onChange={(v) => handleNameChange(stopwatchIndex, v)}/>
                                     </td>
-                                    <td>
-                                        <span><button onClick={() => handleLap(stopwatchIndex, Date.now())} disabled={!sw.isRunning() || sw.isFinished()}>Lap</button></span>
+                                    <td className={style.fillable}>
+                                        <button className={style.expand} onClick={() => handleLap(stopwatchIndex, Date.now())} disabled={!sw.isRunning() || sw.isFinished()}>Lap</button>
                                     </td>
-                                    <td>
-                                        <span><button onClick={() => handleStop(stopwatchIndex, Date.now())} disabled={!sw.isRunning() || sw.isFinished()}>Finish</button></span>
+                                    <td className={style.fillable}>
+                                        <button className={style.expand} onClick={() => handleStop(stopwatchIndex, Date.now())} disabled={!sw.isRunning() || sw.isFinished()}>Finish</button>
                                     </td>
                                     {
                                         Array.from({ length: getMaxSplitCount() }, (_, i) => getMaxSplitCount() - i - 1).map(splitIndex =>
                                             splitIndex >= sw.getSplits().length ?
-                                                <td></td>
+                                                <td key={splitIndex}></td>
                                                 :
-                                                <td>
+                                                <td key={splitIndex}>
                                                     <span className={"fs-5"}>{ formatMilliseconds(multiStopwatch.getSplitTime(stopwatchIndex, splitIndex)) }</span> <br />
                                                     <span className={"fw-light fs-6"}>{ formatMilliseconds(multiStopwatch.getLapTime(stopwatchIndex, splitIndex)) }</span>
                                                 </td>
