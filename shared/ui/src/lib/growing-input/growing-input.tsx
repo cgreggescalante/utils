@@ -22,7 +22,7 @@ export function GrowingInput({label, value, onChange}: GrowingInputProps) {
     return (
         <>
             <span style={{ position: "absolute", opacity: 0, zIndex: -100, whiteSpace: "pre" }} ref={span}>{ content }</span>
-            <input type="text" value={content} style={{ minWidth: "1px", padding: 0, width: width + 5 }} autoFocus onChange={changeHandler} />
+            <input type="text" value={content} style={{ minWidth: "1px", padding: 0, width: width + 5 }} onChange={changeHandler} />
         </>
     )
 }
