@@ -1,7 +1,7 @@
 import {Split} from "./split";
 
-export interface StopwatchSave {
-    saveName: string;
+export interface StopwatchData {
+    name: string;
     startTime: number | null;
     stopTime: number | null;
     elapsedTime: number;

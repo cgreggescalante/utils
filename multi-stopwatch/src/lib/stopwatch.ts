@@ -1,5 +1,4 @@
 import {Split} from "./split";
-import {StopwatchSave} from "./stopwatch-save";
 
 class Stopwatch {
     public name: string | undefined;
@@ -58,23 +57,6 @@ class Stopwatch {
         }
     }
 
-    reset() {
-        this.startTime = null;
-        this.stopTime = null;
-        this.splits = [];
-        this.running = false;
-        this.fastestLap = null;
-        this.slowestLap = null;
-    }
-
-    getElapsedTime(): number {
-        if (this.startTime === null) {
-            return 0;
-        }
-        const stopTime = this.stopTime ?? Date.now();
-        return stopTime - this.startTime;
-    }
-
     getSplits(): Split[] {
         return this.splits;
     }
@@ -83,26 +65,21 @@ class Stopwatch {
         return this.running;
     }
 
-    // Used to sync up the starts of multiple stopwatches
-    setStartTime(startTime: number): void {
-        this.startTime = startTime;
-        this.running = true;
-    }
-
     isFinished(): boolean {
         return this.stopTime !== null;
     }
 
-    saveData(): StopwatchSave {
-        return {
-            saveName: this.name ? this.name : "SAVE",
-            startTime: this.startTime,
-            stopTime: this.stopTime,
-            elapsedTime: this.getElapsedTime(),
-            fastestLap: this.fastestLap,
-            slowestLap: this.slowestLap,
-            splits: this.splits
-        }
+    deepCopy(): Stopwatch {
+        const s = new Stopwatch(this.name);
+
+        s.startTime = this.startTime;
+        s.stopTime = this.stopTime;
+        s.splits = this.splits;
+        s.running = this.running;
+        s.fastestLap = this.fastestLap;
+        s.slowestLap = this.slowestLap;
+
+        return s;
     }
 }
 

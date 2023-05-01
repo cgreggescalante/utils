@@ -1,5 +1,5 @@
-import MultiStopwatch from "./lib/multi-stopwatch";
+import StopwatchSession from "./lib/stopwatch-session"
 
 export {
-    MultiStopwatch
+    StopwatchSession
 }
