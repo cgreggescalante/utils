@@ -56,6 +56,10 @@ class MultiStopwatch {
 
     stop(index: number, stopTime: number) {
         this.stopwatches[index].stop(stopTime);
+
+        if (!this.stopwatches.some(s => s.isRunning())) {
+            this.running = false;
+        }
     }
 
     setName(index: number, name: string) {

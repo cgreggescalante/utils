@@ -81,6 +81,12 @@ class Stopwatch {
 
         return s;
     }
+
+    getElapsedTime(): number {
+        if (this.startTime !== null && this.stopTime !== null)
+            return this.stopTime - this.startTime;
+        return this.startTime ? Date.now() - this.startTime : 0;
+    }
 }
 
 

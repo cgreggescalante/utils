@@ -46,6 +46,7 @@ const MultiStopwatchComponent = ({ multiStopwatch, setMultiStopwatch }: MultiSto
     const handleReset = () => {
         const m = multiStopwatch.deepCopy();
         m.reset();
+        setElapsedTime(0);
         setMultiStopwatch(m);
     }
 
@@ -60,6 +61,11 @@ const MultiStopwatchComponent = ({ multiStopwatch, setMultiStopwatch }: MultiSto
     const handleStop = (index: number, time: number) => {
         const m = multiStopwatch.deepCopy();
         m.stop(index, time);
+
+        if (!m.running && m.startTime !== undefined) {
+            setElapsedTime(time - m.startTime);
+        }
+
         setMultiStopwatch(m);
     }
 
@@ -84,7 +90,6 @@ const MultiStopwatchComponent = ({ multiStopwatch, setMultiStopwatch }: MultiSto
                 <button onClick={handleAddStopwatch} disabled={multiStopwatch.running}>+</button>
                 <button onClick={handleRemoveStopwatch} disabled={multiStopwatch.stopwatches.length == 0}>-</button>
             </div>
-
 
             <Card.Body>
                 <div>
