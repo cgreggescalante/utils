@@ -85,6 +85,13 @@ class MultiStopwatch {
 
         return m;
     }
+
+    static fromObject(ms: Object) {
+        const nm = Object.assign(new MultiStopwatch(''), ms);
+        nm.stopwatches = nm.stopwatches.map(sw => Object.assign(new Stopwatch(), sw))
+
+        return nm;
+    }
 }
 
 export default MultiStopwatch;
