@@ -83,7 +83,7 @@ const MultiStopwatchComponent = ({ multiStopwatch, setMultiStopwatch }: MultiSto
     }
 
     return (
-        <Card className={'mx-auto py-1 px-1'} style={{ maxWidth: "800px", minHeight: "200px", marginTop: "2%" }}>
+        <Card className={'mx-auto py-1 px-1'} style={{ backgroundColor: "#F0ECD1", maxWidth: "800px", minHeight: "200px", marginTop: "2%", marginBottom: "2%" }}>
             <div>
                 <button onClick={() => handleStartAll(Date.now())} disabled={multiStopwatch.running}>Start All</button>
                 <button onClick={() => handleStopAll(Date.now())} disabled={!multiStopwatch.running}>Stop All</button>

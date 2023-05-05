@@ -1,16 +1,20 @@
 import {Split} from "./split";
 
 class Stopwatch {
-    public name: string | undefined;
-    private startTime: number | null;
-    private stopTime: number | null;
-    private splits: Split[];
-    private running: boolean;
+    public name: string;
+    public startTime: number | null;
+    public stopTime: number | null;
+    public splits: Split[];
+    public running: boolean;
+
+    public relay: boolean;
+    public intermediateSplits: boolean;
+    public legNames: string[];
 
     public fastestLap: number | null;
     public slowestLap: number | null;
 
-    constructor(name?: string) {
+    constructor(name: string, relay: boolean, intermediateSplit: boolean) {
         this.name = name;
         this.startTime = null;
         this.stopTime = null;
@@ -18,6 +22,10 @@ class Stopwatch {
         this.running = false;
         this.fastestLap = null;
         this.slowestLap = null;
+
+        this.relay = relay;
+        this.intermediateSplits = intermediateSplit;
+        this.legNames = ["A", "B", "C", "D"];
     }
 
     start(startTime?: number) {
@@ -70,7 +78,7 @@ class Stopwatch {
     }
 
     deepCopy(): Stopwatch {
-        const s = new Stopwatch(this.name);
+        const s = new Stopwatch(this.name, this.relay, this.intermediateSplits);
 
         s.startTime = this.startTime;
         s.stopTime = this.stopTime;
@@ -78,6 +86,7 @@ class Stopwatch {
         s.running = this.running;
         s.fastestLap = this.fastestLap;
         s.slowestLap = this.slowestLap;
+        s.legNames = this.legNames;
 
         return s;
     }

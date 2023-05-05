@@ -4,7 +4,8 @@ import MultiStopwatchComponent from "./multi-stopwatch-component/multi-stopwatch
 import * as XLSX from 'xlsx';
 import downloadFile from "./download-file";
 import {ManagedInput} from "@utils/shared/ui";
-import {formatMilliseconds} from "@utils/shared/tools";
+import {Card} from "react-bootstrap";
+import RelayStopwatchComponent from "./relay-stopwatch-component/relay-stopwatch-component";
 
 
 type UseLocalStorageStateResult<T> = [T, React.Dispatch<React.SetStateAction<T>>];
@@ -51,6 +52,12 @@ const stopwatchSession = () => {
         setMultiStopwatches(arr);
     }
 
+    const addRelayStopwatch = (intermediateSplits: boolean) => {
+        const arr = [...multiStopwatches];
+        arr.push(new MultiStopwatch(`Relay ${arr.length + 1}`, true, intermediateSplits));
+        setMultiStopwatches(arr);
+    }
+
     const removeMultiStopwatch = () => {
         const arr = [...multiStopwatches];
         setMultiStopwatches(arr.slice(0, arr.length - 1));
@@ -68,25 +75,7 @@ const stopwatchSession = () => {
         const workbook = XLSX.utils.book_new();
 
         arr.forEach(ms => {
-            const data: (string | number | undefined)[][] = [['Relay/Runner', 'Finish Time']];
-
-            for (let i = 0; i < ms.getMaxSplitCount(); i++) {
-                data[0].push(`Lap ${i + 1}`);
-            }
-
-            ms.stopwatches.forEach(sw => {
-                const a = [sw.name, formatMilliseconds(sw.getElapsedTime())];
-                const b: (string | number)[] = ['', '']
-
-                sw.getSplits().forEach(split =>  {
-                    a.push(formatMilliseconds(split.splitTime));
-                    b.push(formatMilliseconds(split.lapTime));
-                });
-
-                data.push(a, b)
-            });
-
-            const worksheet = XLSX.utils.aoa_to_sheet(data);
+            const worksheet = XLSX.utils.aoa_to_sheet(ms.export());
             XLSX.utils.book_append_sheet(workbook, worksheet, ms.name);
         });
 
@@ -102,22 +91,30 @@ const stopwatchSession = () => {
     }
 
     return (
-        <>
-            <ManagedInput value={sessionName} valueSetter={setSessionName} />
+        <div style={{ backgroundColor: "#1E1F06", minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flexGrow: '1' }}>
+                <Card className={'mx-auto py-4 px-4'} style={{ backgroundColor: "#F0ECD1", maxWidth: "600px", marginTop: "2%" }}>
+                    <ManagedInput value={sessionName} valueSetter={setSessionName} />
 
-            <div>
-                <button onClick={addMultiStopwatch}>+</button>
-                <button onClick={removeMultiStopwatch} disabled={multiStopwatches.length == 0}>-</button>
-                <button onClick={exportData}>Export (.xlsx)</button>
-                <button onClick={clearSession}>Clear Session</button>
+                    <div>
+                        <button onClick={addMultiStopwatch}>+</button>
+                        <button onClick={() => addRelayStopwatch(true)}>+ (4x800m)</button>
+                        <button onClick={() => addRelayStopwatch(false)}>+ (4x400m)</button>
+                        <button onClick={removeMultiStopwatch} disabled={multiStopwatches.length == 0}>-</button>
+                        <button onClick={exportData}>Export (.xlsx)</button>
+                        <button onClick={clearSession}>Clear Session</button>
+                    </div>
+                </Card>
+
+
+                {
+                    multiStopwatches.map((ms, i) =>
+                        ms.relay ? <RelayStopwatchComponent key={i} multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} /> :
+                        <MultiStopwatchComponent key={i} multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} />
+                    )
+                }
             </div>
-
-            {
-                multiStopwatches.map((ms, i) =>
-                    <MultiStopwatchComponent key={i} multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} />
-                )
-            }
-        </>
+        </div>
     )
 }
 
