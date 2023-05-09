@@ -13,6 +13,11 @@ const Home = () => {
                     Calculator
                 </button>
             </Link>
+            <Link to={"/pace-calculator"}>
+                <button>
+                    Pace Calculator
+                </button>
+            </Link>
         </>
     )
 }

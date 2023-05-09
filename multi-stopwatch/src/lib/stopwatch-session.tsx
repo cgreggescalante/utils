@@ -5,15 +5,11 @@ import * as XLSX from 'xlsx';
 import downloadFile from "./download-file";
 import {ManagedInput} from "@utils/shared/ui";
 import {Card} from "react-bootstrap";
-import RelayStopwatchComponent from "./relay-stopwatch-component/relay-stopwatch-component";
 
 
 type UseLocalStorageStateResult<T> = [T, React.Dispatch<React.SetStateAction<T>>];
 
-function useLocalStorageState<T>(
-    key: string,
-    defaultValue: T
-): UseLocalStorageStateResult<T> {
+function useLocalStorageState<T>(key: string, defaultValue: T): UseLocalStorageStateResult<T> {
     const [state, setState] = useState<T>(() => {
         const storedValue = localStorage.getItem(key);
         return storedValue ? JSON.parse(storedValue) : defaultValue;
@@ -48,19 +44,20 @@ const stopwatchSession = () => {
 
     const addMultiStopwatch = () => {
         const arr = [...multiStopwatches];
-        arr.push(new MultiStopwatch(`Stopwatch ${arr.length + 1}`));
+        arr.push(new MultiStopwatch(`Stopwatch`));
         setMultiStopwatches(arr);
     }
 
     const addRelayStopwatch = (intermediateSplits: boolean) => {
         const arr = [...multiStopwatches];
-        arr.push(new MultiStopwatch(`Relay ${arr.length + 1}`, true, intermediateSplits));
+        arr.push(new MultiStopwatch(`Stopwatch`, true, intermediateSplits));
         setMultiStopwatches(arr);
     }
 
-    const removeMultiStopwatch = () => {
+    const removeMultiStopwatchIndex = (index: number) => {
         const arr = [...multiStopwatches];
-        setMultiStopwatches(arr.slice(0, arr.length - 1));
+        arr.splice(index, 1);
+        setMultiStopwatches(arr);
     }
 
     const setMultiStopwatch = (multiStopwatch: MultiStopwatch, index: number) => {
@@ -74,9 +71,9 @@ const stopwatchSession = () => {
 
         const workbook = XLSX.utils.book_new();
 
-        arr.forEach(ms => {
+        arr.forEach((ms, index) => {
             const worksheet = XLSX.utils.aoa_to_sheet(ms.export());
-            XLSX.utils.book_append_sheet(workbook, worksheet, ms.name);
+            XLSX.utils.book_append_sheet(workbook, worksheet, `${index} ${ms.name}`);
         });
 
         const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
@@ -97,20 +94,19 @@ const stopwatchSession = () => {
                     <ManagedInput value={sessionName} valueSetter={setSessionName} />
 
                     <div>
-                        <button onClick={addMultiStopwatch}>+</button>
-                        <button onClick={() => addRelayStopwatch(true)}>+ (4x800m)</button>
-                        <button onClick={() => addRelayStopwatch(false)}>+ (4x400m)</button>
-                        <button onClick={removeMultiStopwatch} disabled={multiStopwatches.length == 0}>-</button>
+                        <button onClick={addMultiStopwatch}>Add</button>
+                        <button onClick={() => addRelayStopwatch(true)}>Add 4x800m</button>
+                        <button onClick={() => addRelayStopwatch(false)}>Add 4x400m</button>
+                    </div>
+                    <div>
                         <button onClick={exportData}>Export (.xlsx)</button>
                         <button onClick={clearSession}>Clear Session</button>
                     </div>
                 </Card>
 
-
                 {
                     multiStopwatches.map((ms, i) =>
-                        ms.relay ? <RelayStopwatchComponent key={i} multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} /> :
-                        <MultiStopwatchComponent key={i} multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} />
+                        <MultiStopwatchComponent multiStopwatch={ms} setMultiStopwatch={(ms: MultiStopwatch) => setMultiStopwatch(ms, i)} removeMultiStopwatch={() => removeMultiStopwatchIndex(i)} />
                     )
                 }
             </div>
