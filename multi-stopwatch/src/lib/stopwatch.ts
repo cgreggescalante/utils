@@ -65,6 +65,18 @@ class Stopwatch {
         }
     }
 
+    getCurrentElapsedLap(): number {
+        if (this.running && this.startTime) {
+            const current = Date.now();
+            if (this.splits.length > 0) {
+                return current - this.splits[this.splits.length - 1].splitTime - this.startTime;
+            }
+            return current - this.startTime;
+        }
+
+        return 0;
+    }
+
     getSplits(): Split[] {
         return this.splits;
     }

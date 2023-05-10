@@ -1,8 +1,29 @@
-.fillable {
-
+.startButton {
+    height: 100px;
+    width: 100px;
 }
 
-.expand {
+.resetButton {
+    height: 50px;
+    width: 100px
+}
+
+.addRemoveButton {
+    height: 50px;
+    width: 50px;
+}
+
+.lapButton {
+    height: 80px;
+    min-width: 80px
+}
+
+.finishButton {
+    height: 80px;
+    min-width: 80px;
+}
+
+.relayButton {
     height: 65px;
-    min-width: 65px
+    min-width: 80px;
 }

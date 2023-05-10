@@ -37,12 +37,6 @@ class MultiStopwatch {
         this.hasStarted = true;
     }
 
-    stopAll(stopTime: number) {
-        this.stopTime = stopTime;
-        this.stopwatches.forEach(sw => sw.stop(stopTime));
-        this.running = false;
-    }
-
     reset() {
         this.startTime = undefined;
         this.stopTime = undefined;
@@ -79,6 +73,10 @@ class MultiStopwatch {
 
     getSplitTime(index: number, splitIndex: number) {
         return this.stopwatches[index].getSplits()[splitIndex].splitTime;
+    }
+
+    getCurrentElapsedLap(index: number) {
+        return this.stopwatches[index].getCurrentElapsedLap();
     }
 
     getLapTime(index: number, lapIndex: number) {
